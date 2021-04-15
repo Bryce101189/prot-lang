@@ -2,11 +2,16 @@ use std::env;
 use std::fs::File;
 use std::io::Read;
 
+use lexer::Lexer;
+
+pub mod lexer;
+pub mod token;
+
 fn main() {
     // Get file path
     if env::args().len() <= 1 {
-        eprintln!("error: no input file(s) provided");
-        eprintln!(" -h or --help for usage guide and command list");
+        eprintln!("Input error: no input file(s) provided");
+        eprintln!(" -h or --help for usage guide and command list\n");
         return;
     }
 
@@ -15,8 +20,8 @@ fn main() {
 
     // Check if path is valid
     if !script_path.ends_with(".prot") {
-        eprintln!("error: unrecognized file extension(s)");
-        eprintln!(" please make sure all input files use the '.prot' file extension");
+        eprintln!("Input error: unrecognized file extension(s)");
+        eprintln!(" please make sure all input files use the '.prot' file extension\n");
         return;
     }
 
@@ -30,7 +35,7 @@ fn main() {
             }
 
             Err(..) => {
-                eprintln!("error: could not open file '{}'", script_path);
+                eprintln!("IO error: could not open file '{}'\n", script_path);
                 return;
             }
         }
@@ -42,7 +47,10 @@ fn main() {
     let mut contents = String::new();
 
     if let Err(..) = script.read_to_string(&mut contents) {
-        eprintln!("error: failed to read from file '{}'", script_path);
+        eprintln!("IO error: failed to read from file '{}'\n", script_path);
         return;
     }
+
+    let mut lexer = Lexer::new(contents);
+    let _tokens = lexer.collect_tokens();
 }
