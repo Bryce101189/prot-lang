@@ -10,7 +10,7 @@ pub struct Lexer {
     token_location: (usize, usize),
 
     at_new_line: bool,
-    contains_errors: bool,
+    pub contains_errors: bool,
 
     indent_stack: Vec<usize>,
     indent_counter: usize,
@@ -37,6 +37,22 @@ impl Lexer {
             bracket_counter: 0,
             paren_counter: 0,
         }
+    }
+
+    pub fn reset(&mut self) {
+        self.tokens.clear();
+        self.cursor = 0;
+
+        self.location = (0, 0);
+        self.token_location = (0, 0);
+
+        self.at_new_line = true;
+        self.contains_errors = false;
+
+        self.indent_stack = vec![0];
+        self.indent_counter = 0;
+        self.bracket_counter = 0;
+        self.paren_counter = 0;
     }
 
     fn reached_end(&self) -> bool {
@@ -119,10 +135,7 @@ impl Lexer {
             return;
         } else if spaces > *self.indent_stack.last().unwrap() {
             self.indent_counter += 1;
-            self.tokens.push(Token {
-                kind: TokenKind::Indent,
-                lexeme: String::new(),
-            });
+            self.tokens.push(Token::from(TokenKind::Indent));
         }
 
         // Go down the indentation stack, keeping track of the lowest indentation level seen that is still greater than
@@ -143,10 +156,7 @@ impl Lexer {
                 lowest = i;
                 self.indent_counter -= 1;
 
-                self.tokens.push(Token {
-                    kind: TokenKind::Dedent,
-                    lexeme: String::new(),
-                });
+                self.tokens.push(Token::from(TokenKind::Dedent));
             }
         }
 
@@ -155,10 +165,7 @@ impl Lexer {
 
     fn resolve_indentation_level(&mut self) {
         for _ in 0..self.indent_counter {
-            self.tokens.push(Token {
-                kind: TokenKind::Dedent,
-                lexeme: String::new(),
-            });
+            self.tokens.push(Token::from(TokenKind::Dedent));
         }
     }
 
@@ -194,10 +201,7 @@ impl Lexer {
             _ => TokenKind::Identifier(lexeme.clone()),
         };
 
-        self.tokens.push(Token {
-            kind,
-            lexeme: lexeme,
-        });
+        self.tokens.push(Token::new(kind, lexeme));
     }
 
     fn get_number(&mut self) {
@@ -218,10 +222,7 @@ impl Lexer {
 
         let number: f64 = lexeme.parse().unwrap();
 
-        self.tokens.push(Token {
-            kind: TokenKind::Number(number),
-            lexeme: lexeme,
-        });
+        self.tokens.push(Token::new(TokenKind::Number(number), lexeme));
     }
 
     fn get_string(&mut self) {
@@ -266,10 +267,7 @@ impl Lexer {
         // Skip over trailing quotation mark
         self.advance();
 
-        self.tokens.push(Token {
-            kind: TokenKind::String(lexeme.clone()),
-            lexeme: lexeme,
-        });
+        self.tokens.push(Token::new(TokenKind::String(lexeme.clone()), lexeme));
     }
 
     fn get_symbol(&mut self) {
@@ -416,15 +414,12 @@ impl Lexer {
         };
 
         if let Some(kind) = kind {
-            self.tokens.push(Token {
-                kind,
-                lexeme: String::new(),
-            });
+            self.tokens.push(Token::from(kind));
         }
     }
 
     pub fn collect_tokens(&mut self) -> Vec<Token> {
-        self.tokens.clear();
+        self.reset();
 
         while !self.reached_end() {
             if self.at_new_line
@@ -457,10 +452,7 @@ impl Lexer {
 
         if let Some(prev) = prev {
             if prev.kind != TokenKind::Newline {
-                self.tokens.push(Token {
-                    kind: TokenKind::Newline,
-                    lexeme: String::new(),
-                })
+                self.tokens.push(Token::from(TokenKind::Newline));
             }
         }
 

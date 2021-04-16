@@ -73,3 +73,21 @@ pub struct Token {
     pub kind: TokenKind,
     pub lexeme: String,
 }
+
+impl Token {
+    pub fn new(kind: TokenKind, lexeme: String) -> Token {
+        Token {
+            kind,
+            lexeme,
+        }
+    }
+}
+
+impl From<TokenKind> for Token {
+    fn from(kind: TokenKind) -> Token {
+        Token {
+            kind,
+            lexeme: String::new(),
+        }
+    }
+}

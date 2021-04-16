@@ -25,22 +25,10 @@ fn lex_symbols() {
     assert_eq!(
         lex("[ += ]"),
         vec![
-            Token {
-                kind: TokenKind::LeftBracket,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::PlusEqual,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::RightBracket,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            }
+            Token::from(TokenKind::LeftBracket),
+            Token::from(TokenKind::PlusEqual),
+            Token::from(TokenKind::RightBracket),
+            Token::from(TokenKind::Newline),
         ]
     );
 }
@@ -50,14 +38,8 @@ fn lex_keyword() {
     assert_eq!(
         lex("if"),
         vec![
-            Token {
-                kind: TokenKind::If,
-                lexeme: String::from("if")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            }
+            Token::new(TokenKind::If, String::from("if")),
+            Token::from(TokenKind::Newline),
         ]
     );
 }
@@ -67,14 +49,8 @@ fn lex_identifier() {
     assert_eq!(
         lex("foo"),
         vec![
-            Token {
-                kind: TokenKind::Identifier(String::from("foo")),
-                lexeme: String::from("foo")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            }
+            Token::new(TokenKind::Identifier(String::from("foo")), String::from("foo")),
+            Token::from(TokenKind::Newline),
         ]
     );
 }
@@ -84,14 +60,8 @@ fn lex_number() {
     assert_eq!(
         lex("3.14"),
         vec![
-            Token {
-                kind: TokenKind::Number(3.14),
-                lexeme: String::from("3.14")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            }
+            Token::new(TokenKind::Number(3.14), String::from("3.14")),
+            Token::from(TokenKind::Newline)
         ]
     );
 }
@@ -101,18 +71,9 @@ fn lex_string() {
     assert_eq!(
         lex("'Hello' \"world\""),
         vec![
-            Token {
-                kind: TokenKind::String(String::from("Hello")),
-                lexeme: String::from("Hello")
-            },
-            Token {
-                kind: TokenKind::String(String::from("world")),
-                lexeme: String::from("world")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            }
+            Token::new(TokenKind::String(String::from("Hello")), String::from("Hello")),
+            Token::new(TokenKind::String(String::from("world")), String::from("world")),
+            Token::from(TokenKind::Newline)
         ]
     );
 }
@@ -125,30 +86,12 @@ if
     then
         "#),
         vec![
-            Token {
-                kind: TokenKind::If,
-                lexeme: String::from("if")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::Indent,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::Identifier(String::from("then")),
-                lexeme: String::from("then")
-            },
-            Token {
-                kind: TokenKind::Newline,
-                lexeme: String::new()
-            },
-            Token {
-                kind: TokenKind::Dedent,
-                lexeme: String::new()
-            },
+            Token::new(TokenKind::If, String::from("if")),
+            Token::from(TokenKind::Newline),
+            Token::from(TokenKind::Indent),
+            Token::new(TokenKind::Identifier(String::from("then")), String::from("then")),
+            Token::from(TokenKind::Newline),
+            Token::from(TokenKind::Dedent),
         ]
     );
 }
