@@ -1,6 +1,6 @@
-use crate::token::{Token, TokenKind};
 use crate::expr::Expr;
 use crate::parser::Parser;
+use crate::token::{Token, TokenKind};
 
 fn parse(tokens: Vec<Token>) -> Expr {
     Parser::new(tokens).parse_tokens()
@@ -14,19 +14,10 @@ fn parse_equality() {
             Token::from(TokenKind::EqualEqual),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Binary(
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(8.7))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(8.7)))),
             Token::from(TokenKind::EqualEqual),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -39,19 +30,10 @@ fn parse_comparison() {
             Token::from(TokenKind::GreaterEqual),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Binary(
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(8.7))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(8.7)))),
             Token::from(TokenKind::GreaterEqual),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -64,19 +46,10 @@ fn parse_term() {
             Token::from(TokenKind::Plus),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Binary(
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(8.7))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(8.7)))),
             Token::from(TokenKind::Plus),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -89,19 +62,10 @@ fn parse_factor() {
             Token::from(TokenKind::Star),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Binary(
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(8.7))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(8.7)))),
             Token::from(TokenKind::Star),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -114,19 +78,10 @@ fn parse_exponent() {
             Token::from(TokenKind::Caret),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Binary(
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(8.7))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(8.7)))),
             Token::from(TokenKind::Caret),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -138,14 +93,9 @@ fn parse_unary() {
             Token::from(TokenKind::Minus),
             Token::from(TokenKind::Number(3.14)),
         ]),
-
         Expr::Unary(
             Token::from(TokenKind::Minus),
-            Box::new(
-                Expr::Literal(
-                    Token::from(TokenKind::Number(3.14))
-                )
-            ),
+            Box::new(Expr::Literal(Token::from(TokenKind::Number(3.14)))),
         )
     );
 }
@@ -153,13 +103,8 @@ fn parse_unary() {
 #[test]
 fn parse_literal() {
     assert_eq!(
-        parse(vec![
-            Token::from(TokenKind::Number(8.7)),
-        ]),
-
-        Expr::Literal(
-            Token::from(TokenKind::Number(8.7))
-        )
+        parse(vec![Token::from(TokenKind::Number(8.7)),]),
+        Expr::Literal(Token::from(TokenKind::Number(8.7)))
     );
 }
 
@@ -173,26 +118,16 @@ fn parse_grouping() {
             Token::from(TokenKind::Number(5.0)),
             Token::from(TokenKind::RightBracket),
         ]),
-
         Expr::Grouping(
             Token::from(TokenKind::LeftBracket),
-            Box::new(
-                Expr::Binary(
-                    Box::new(
-                        Expr::Literal(
-                            Token::new(TokenKind::Identifier(String::from("a")), String::from("a"))
-                        )
-                    ),
-
-                    Token::from(TokenKind::Plus),
-                    
-                    Box::new(
-                        Expr::Literal(
-                            Token::from(TokenKind::Number(5.0))
-                        )
-                    )
-                )
-            ),
+            Box::new(Expr::Binary(
+                Box::new(Expr::Literal(Token::new(
+                    TokenKind::Identifier(String::from("a")),
+                    String::from("a")
+                ))),
+                Token::from(TokenKind::Plus),
+                Box::new(Expr::Literal(Token::from(TokenKind::Number(5.0))))
+            )),
             Token::from(TokenKind::RightBracket),
         )
     );

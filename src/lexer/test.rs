@@ -49,7 +49,10 @@ fn lex_identifier() {
     assert_eq!(
         lex("foo"),
         vec![
-            Token::new(TokenKind::Identifier(String::from("foo")), String::from("foo")),
+            Token::new(
+                TokenKind::Identifier(String::from("foo")),
+                String::from("foo")
+            ),
             Token::from(TokenKind::Newline),
         ]
     );
@@ -71,8 +74,14 @@ fn lex_string() {
     assert_eq!(
         lex("'Hello' \"world\""),
         vec![
-            Token::new(TokenKind::String(String::from("Hello")), String::from("Hello")),
-            Token::new(TokenKind::String(String::from("world")), String::from("world")),
+            Token::new(
+                TokenKind::String(String::from("Hello")),
+                String::from("Hello")
+            ),
+            Token::new(
+                TokenKind::String(String::from("world")),
+                String::from("world")
+            ),
             Token::from(TokenKind::Newline)
         ]
     );
@@ -89,7 +98,10 @@ if
             Token::new(TokenKind::If, String::from("if")),
             Token::from(TokenKind::Newline),
             Token::from(TokenKind::Indent),
-            Token::new(TokenKind::Identifier(String::from("then")), String::from("then")),
+            Token::new(
+                TokenKind::Identifier(String::from("then")),
+                String::from("then")
+            ),
             Token::from(TokenKind::Newline),
             Token::from(TokenKind::Dedent),
         ]

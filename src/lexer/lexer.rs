@@ -222,7 +222,8 @@ impl Lexer {
 
         let number: f64 = lexeme.parse().unwrap();
 
-        self.tokens.push(Token::new(TokenKind::Number(number), lexeme));
+        self.tokens
+            .push(Token::new(TokenKind::Number(number), lexeme));
     }
 
     fn get_string(&mut self) {
@@ -267,7 +268,8 @@ impl Lexer {
         // Skip over trailing quotation mark
         self.advance();
 
-        self.tokens.push(Token::new(TokenKind::String(lexeme.clone()), lexeme));
+        self.tokens
+            .push(Token::new(TokenKind::String(lexeme.clone()), lexeme));
     }
 
     fn get_symbol(&mut self) {

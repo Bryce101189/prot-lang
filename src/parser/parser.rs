@@ -74,36 +74,24 @@ impl Parser {
                 let expr = self.parse_expression();
                 self.expect(TokenKind::RightParen);
 
-                Expr::Grouping(
-                    lhs,
-                    Box::new(expr),
-                    Token::from(TokenKind::RightParen),
-                )
-            },
+                Expr::Grouping(lhs, Box::new(expr), Token::from(TokenKind::RightParen))
+            }
 
             TokenKind::LeftBracket => {
                 let lhs = self.advance();
                 let expr = self.parse_expression();
                 self.expect(TokenKind::RightBracket);
 
-                Expr::Grouping(
-                    lhs,
-                    Box::new(expr),
-                    Token::from(TokenKind::RightBracket),
-                )
-            },
+                Expr::Grouping(lhs, Box::new(expr), Token::from(TokenKind::RightBracket))
+            }
 
             TokenKind::Indent => {
                 let lhs = self.advance();
                 let expr = self.parse_expression();
                 self.expect(TokenKind::Dedent);
 
-                Expr::Grouping(
-                    lhs,
-                    Box::new(expr),
-                    Token::from(TokenKind::Dedent),
-                )
-            },
+                Expr::Grouping(lhs, Box::new(expr), Token::from(TokenKind::Dedent))
+            }
 
             _ => Expr::Literal(Token::from(TokenKind::Eof)),
         }
