@@ -3,8 +3,11 @@ use std::fs::File;
 use std::io::Read;
 
 use lexer::Lexer;
+use parser::Parser;
 
+pub mod expr;
 pub mod lexer;
+pub mod parser;
 pub mod token;
 
 fn main() {
@@ -52,5 +55,16 @@ fn main() {
     }
 
     let mut lexer = Lexer::new(contents);
-    let _tokens = lexer.collect_tokens();
+    let tokens = lexer.collect_tokens();
+
+    if lexer.contains_errors || tokens.is_empty() {
+        return;
+    }
+
+    let mut parser = Parser::new(tokens);
+    let _expr = parser.parse_tokens();
+
+    if parser.contains_errors {
+        return;
+    }
 }
