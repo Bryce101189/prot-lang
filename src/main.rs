@@ -2,10 +2,12 @@ use std::env;
 use std::fs::File;
 use std::io::Read;
 
+use interpreter::visit_expr;
 use lexer::Lexer;
 use parser::Parser;
 
 pub mod expr;
+pub mod interpreter;
 pub mod lexer;
 pub mod parser;
 pub mod token;
@@ -62,9 +64,11 @@ fn main() {
     }
 
     let mut parser = Parser::new(tokens);
-    let _expr = parser.parse_tokens();
+    let expr = parser.parse_tokens();
 
     if parser.contains_errors {
         return;
     }
+
+    println!("{:?}", visit_expr(expr).kind)
 }

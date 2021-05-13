@@ -194,8 +194,8 @@ impl Lexer {
             "while" => TokenKind::While,
             "loop" => TokenKind::Loop,
 
-            "true" => TokenKind::True,
-            "false" => TokenKind::False,
+            "true" => TokenKind::Bool(true),
+            "false" => TokenKind::Bool(false),
             "none" => TokenKind::None,
 
             _ => TokenKind::Identifier(lexeme.clone()),

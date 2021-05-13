@@ -61,9 +61,8 @@ impl Parser {
     fn parse_primary(&mut self) -> Expr {
         match self.peek().kind {
             // Literals
-            TokenKind::True
-            | TokenKind::False
-            | TokenKind::None
+            TokenKind::None
+            | TokenKind::Bool(..)
             | TokenKind::Number(..)
             | TokenKind::String(..)
             | TokenKind::Identifier(..) => Expr::Literal(self.advance()),
@@ -98,7 +97,10 @@ impl Parser {
     }
 
     fn parse_unary(&mut self) -> Expr {
-        while self.is_match(TokenKind::Bang) || self.is_match(TokenKind::Minus) {
+        while self.is_match(TokenKind::Bang)
+            || self.is_match(TokenKind::Not)
+            || self.is_match(TokenKind::Minus)
+        {
             let op = self.advance();
             let rhs = self.parse_unary();
 
