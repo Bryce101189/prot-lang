@@ -1,4 +1,4 @@
-use crate::expr::Expr;
+use crate::{expr::Expr, statement::Statement};
 use crate::token::{Token, TokenKind};
 
 pub struct Parser {
@@ -54,7 +54,7 @@ impl Parser {
             }
         }
 
-        eprintln!("Parsing error: expected token of type {:?}\n.", kind);
+        eprintln!("Parsing error: expected token of type {:?}.\n", kind);
         self.contains_errors = true;
     }
 
@@ -181,8 +181,29 @@ impl Parser {
         self.parse_equality()
     }
 
-    pub fn parse_tokens(&mut self) -> Expr {
+    fn parse_print(&mut self) -> Statement {
+        let expr = self.parse_expression();
+        self.expect(TokenKind::Newline);
+        Statement::Print(expr)
+    }
+
+    fn parse_statement(&mut self) -> Statement {
+        match self.advance().kind {
+            TokenKind::Print => self.parse_print(),
+
+            _ => Statement::Expr(self.parse_expression()),
+        }
+    }
+
+    pub fn parse_tokens(&mut self) -> Vec<Statement> {
         self.reset();
-        self.parse_expression()
+        let mut statements = Vec::new();
+
+        while self.cursor < self.tokens.len() - 1 {
+            let statement = self.parse_statement();
+            statements.push(statement);
+        }
+
+        statements
     }
 }

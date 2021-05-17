@@ -1,3 +1,3 @@
-pub use self::interpreter::visit_expr;
+pub use self::interpreter::interpret_program;
 
 pub mod interpreter;

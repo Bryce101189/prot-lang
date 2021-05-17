@@ -1,6 +1,7 @@
-use crate::expr::Expr;
-use crate::token::Token;
+use crate::statement::Statement;
 
-pub fn visit_expr(mut expr: Expr) -> Token {
-    expr.evaluate()
+pub fn interpret_program(statements: Vec<Statement>) {
+    for mut statement in statements {
+        statement.evaluate();
+    }
 }
